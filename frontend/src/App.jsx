@@ -1,12 +1,16 @@
-// App.js
-
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Welcome from "./pages/Welcome";
 
 function App() {
   return (
     <>
-      <p>Hello World</p>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Welcome />}></Route>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }

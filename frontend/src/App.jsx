@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import NoPage from "./pages/NoPage";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
           <Route path="*" element={<NoPage />}></Route>
           <Route path="home" element={<Home />}></Route>
           <Route path="register" element={<Register />}></Route>
-          <Route path="login" element={<NoPage />}></Route>
+          <Route path="login" element={<Login />}></Route>
           <Route path="logout" element={<NoPage />}></Route>
         </Routes>
       </BrowserRouter>

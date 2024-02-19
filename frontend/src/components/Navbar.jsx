@@ -1,34 +1,58 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
+
+import { AuthContext } from "../context/authContext";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const { isLoggedIn } = useContext(AuthContext);
+  const { setIsLoggedIn } = useContext(AuthContext);
 
   const handleMenu = () => {
     setShowMenu(!showMenu);
+  };
+
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    // User is now logged out
+    setIsLoggedIn(false);
   };
 
   const links = [
     { id: 1, text: "home" },
     { id: 2, text: "register" },
     { id: 3, text: "login" },
-    { id: 4, text: "logout" },
   ];
 
   return (
     <div className="bg-black flex justify-between items-center h-24 w-full mx-auto text-white">
       <h1 className="w-full text-3xl font-bold text-white p-1">Auth</h1>
       <ul className="hidden md:flex">
-        {links.map((link) => (
-          <li key={link.id} className="p-4">
-            <NavLink
-              to={`/${link.text}`}
-              className="aria-[current=page]:text-blue-400 p-4 hover:bg-[#0095df] rounded-xl m-2 cursor-pointer duration-300 hover:text-black"
+        {links.map((link) =>
+          isLoggedIn && link.text === "login" ? (
+            <li
+              key={link.id}
+              className="p-4"
+              onClick={handleSignOut}
             >
-              {link.text}
-            </NavLink>
-          </li>
-        ))}
+              <NavLink
+                to={"/"}
+                className="text-white p-4 hover:bg-[#0095df] rounded-xl m-2 cursor-pointer duration-300 hover:text-black"
+              >
+                signout
+              </NavLink>
+            </li>
+          ) : (
+            <li key={link.id} className="p-4">
+              <NavLink
+                to={`/${link.text}`}
+                className="aria-[current=page]:text-blue-400 p-4 hover:bg-[#0095df] rounded-xl m-2 cursor-pointer duration-300 hover:text-black"
+              >
+                {link.text}
+              </NavLink>
+            </li>
+          )
+        )}
       </ul>
       <div onClick={handleMenu} className="md:hidden">
         {showMenu ? <span>X</span> : <span>&#9776;</span>}

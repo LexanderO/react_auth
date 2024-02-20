@@ -1,62 +1,51 @@
-// authController.js
-
+require('dotenv').config(); 
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-const handleErrors = (err) => {
-    let errors = { email: '', password: '' };
+exports.register = async (req, res) => {
+  const { username, email, password } = req.body;
 
-    // duplicate error code
-    if (err.code === 11000) {
-        errors.email = 'That email is already registered';
-        return errors;
+  try {
+    const existingUser = await User.findOne({ username });
+
+    if (existingUser) {
+      return res.status(400).json({ message: 'Username already exists' });
     }
 
-    // validation errors
-    if (err.message.includes('user validation failed')) {
-        Object.values(err.errors).forEach(({ properties }) => {
-            errors[properties.path] = properties.message;
-        });
+    const user = new User({ username, email, password });
+    await user.save();
+
+    // User registered successfully, now log them in
+    const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
+
+    res.status(201).json({ message: 'User registered successfully. You are now logged in.', token });
+  } catch (err) {
+    res.status(500).json({ message: 'Error registering user' });
+  }
+};
+
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid email or password' });
     }
 
-    return errors;
-}
+    const validPassword = await bcrypt.compare(password, user.password);
 
-const maxAge = 3 * 24 * 60 * 60;
-const createToken = (id) => {
-    return jwt.sign({ id }, 'your secret', {
-        expiresIn: maxAge
-    });
-};
-
-const register = async (req, res) => {
-    const { email, password } = req.body;
-
-    try {
-        const user = await User.create({ email, password });
-        const token = createToken(user._id);
-        res.status(201).json({ user: user._id, token });
-    } catch (err) {
-        const errors = handleErrors(err);
-        res.status(400).json({ errors });
+    if (!validPassword) {
+      return res.status(400).json({ message: 'Invalid email or password' });
     }
+
+    const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
+
+    res.json({ message: 'Logged in successfully', token });
+  } catch (err) {
+    res.status(500).json({ message: 'Error logging in user' });
+  }
 };
 
-const login = async (req, res) => {
-    const { email, password } = req.body;
-
-    try {
-        const user = await User.login(email, password);
-        const token = createToken(user._id);
-        res.status(200).json({ user: user._id, token });
-    } catch (err) {
-        const errors = handleErrors(err);
-        res.status(400).json({ errors });
-    }
-};
-
-module.exports = {
-    register,
-    login
-};

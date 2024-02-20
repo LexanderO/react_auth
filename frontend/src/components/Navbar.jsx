@@ -59,8 +59,8 @@ const Navbar = () => {
           )
         )}
       </ul>
-      <div onClick={handleMenu} className="md:hidden">
-        {showMenu ? <span>X</span> : <span>&#9776;</span>}
+      <div onClick={handleMenu} className="md:hidden mr-4">
+        {showMenu ? <span className="text-4xl">X</span> : <span className="text-4xl">&#9776;</span>}
       </div>
       <ul
         className={
@@ -75,16 +75,20 @@ const Navbar = () => {
         {/* Mobile Navigation Items */}
         {links.map((link) =>
           isLoggedIn && link.text === "login" ? (
-            <li key={link.id} className="p-4 border-b rounded-xl hover:bg-[#0095df] duration-300 hover:text-black cursor-pointer border-gray-600" onClick={handleSignOut}>
-              <NavLink
-                to={"/"}
-                className="text-white block"
-              >
+            <li
+              key={link.id}
+              className="p-4 border-b rounded-xl hover:bg-[#0095df] duration-300 hover:text-black cursor-pointer border-gray-600"
+              onClick={handleSignOut}
+            >
+              <NavLink to={"/"} className="text-white block">
                 signout
               </NavLink>
             </li>
           ) : isLoggedIn && link.text === "register" ? (
-            <li key={link.id} className="p-4 border-b rounded-xl hover:bg-[#0095df] duration-300 hover:text-black cursor-pointer border-gray-600">
+            <li
+              key={link.id}
+              className="p-4 border-b rounded-xl hover:bg-[#0095df] duration-300 hover:text-black cursor-pointer border-gray-600"
+            >
               <NavLink
                 to={"/"}
                 className="aria-[current=page]:text-blue-400 block"
@@ -93,7 +97,10 @@ const Navbar = () => {
               </NavLink>
             </li>
           ) : (
-            <li key={link.id} className="p-4 border-b rounded-xl hover:bg-[#0095df] duration-300 hover:text-black cursor-pointer border-gray-600">
+            <li
+              key={link.id}
+              className="p-4 border-b rounded-xl hover:bg-[#0095df] duration-300 hover:text-black cursor-pointer border-gray-600"
+            >
               <NavLink
                 to={`/${link.text}`}
                 className="aria-[current=page]:text-blue-400 block"

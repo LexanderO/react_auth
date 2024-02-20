@@ -30,16 +30,21 @@ const Navbar = () => {
       <ul className="hidden md:flex">
         {links.map((link) =>
           isLoggedIn && link.text === "login" ? (
-            <li
-              key={link.id}
-              className="p-4"
-              onClick={handleSignOut}
-            >
+            <li key={link.id} className="p-4" onClick={handleSignOut}>
               <NavLink
                 to={"/"}
                 className="text-white p-4 hover:bg-[#0095df] rounded-xl m-2 cursor-pointer duration-300 hover:text-black"
               >
                 signout
+              </NavLink>
+            </li>
+          ) : isLoggedIn && link.text === "register" ? (
+            <li key={link.id} className="p-4">
+              <NavLink
+                to={"/"}
+                className="text-white p-4 hover:bg-[#0095df] rounded-xl m-2 cursor-pointer duration-300 hover:text-black"
+              >
+                account
               </NavLink>
             </li>
           ) : (

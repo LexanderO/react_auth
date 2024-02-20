@@ -60,7 +60,11 @@ const Navbar = () => {
         )}
       </ul>
       <div onClick={handleMenu} className="md:hidden mr-4">
-        {showMenu ? <span className="text-4xl">X</span> : <span className="text-4xl">&#9776;</span>}
+        {showMenu ? (
+          <span className="text-4xl">X</span>
+        ) : (
+          <span className="text-4xl">&#9776;</span>
+        )}
       </div>
       <ul
         className={
